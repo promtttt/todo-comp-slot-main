@@ -4,12 +4,13 @@ import AddEditTodo from './AddEditTodo.vue'
 import TodoList from './TodoList.vue'
 // import todos from '../../data/todos.json'
 import { onMounted, ref } from 'vue'
-import { getItems, getItemById, deleteItemById, addItem, editItem } from '../libs/fetchUtils';
-import TodoManagement from '../libs/TodoManagement'
+import {  getItems, getItemById, deleteItemById, addItem, editItem }  from '../libs/fetchUtils'
+import TodoManagement from '../libs/TodoManagement';
  
 const showModal = ref(false)
 const clearModal = (flagModal) => {
   showModal.value = flagModal
+  console.log('KUY');
 }
 const editingTodo = ref({ id: undefined, category: '', description: '' })
 const openModalToEdit = (todo) => {
@@ -17,11 +18,18 @@ const openModalToEdit = (todo) => {
   editingTodo.value = todo
 }
 const myTodos = ref(new TodoManagement())
-onMounted(async ()=>{
+onMounted( async ()=>{
   const items = await getItems(import.meta.env.VITE_BASE_URL)
   myTodos.value.addTodos(items)
   console.log(myTodos.value.getTodos())
 })
+ 
+const removeTodo = async (removeId) => {
+  const removeStatus = await deleteItemById(import.meta.env.VITE_BASE_URL, removeId)
+  if(removeStatus===200){
+    myTodos.value.removeTodo(removeId)
+  }
+}
 </script>
  
 <template>
@@ -34,7 +42,7 @@ onMounted(async ()=>{
         Add New Todo
       </button>
     </div>
-    <TodoList :todos="myTodos.getTodos()" @editMode="openModalToEdit" />
+    <TodoList :todos="myTodos.getTodos()" @editMode="openModalToEdit" @deleteTodo="removeTodo"/>
     <Teleport to="#addEditModal">
       <div
         v-show="showModal"
