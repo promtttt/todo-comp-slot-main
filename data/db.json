@@ -1,13 +1,8 @@
 {
   "todos": [
     {
-      "id": "3",
-      "category": "home",
-      "description": "Clean the house"
-    },
-    {
       "id": "4",
-      "category": "work",
+      "category": "home",
       "description": "Attend meeting at 2 PM"
     },
     {
